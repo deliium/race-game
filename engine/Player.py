@@ -29,6 +29,22 @@ class Player(object):
 
         self.remove_from_field()
 
-        # TODO move player
+        # TODO move player when button is holding
+        if self.direction == "left":
+            is_move = True
+            for coord in self.player:
+                if coord[0] <= 1:
+                    is_move = False
+            if is_move:
+                for i in range(len(self.player)):
+                    self.player[i][0] -= 1
+        elif self.direction == "right":
+            is_move = True
+            for coord in self.player:
+                if coord[0] >= TILE_X_COUNT-2:
+                    is_move = False
+            if is_move:
+                for i in range(len(self.player)):
+                    self.player[i][0] += 1
 
         self.put_to_field()

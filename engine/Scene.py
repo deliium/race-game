@@ -4,6 +4,7 @@ from .const import *
 _foo() -> must override in descendants
 """
 
+
 class Scene(object):
     def __init__(self, next_scene=None):
         self.display = None
