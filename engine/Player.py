@@ -1,5 +1,6 @@
 from .ResourceManager import ResourceManager
 from .const import *
+from .decorators import check_move
 
 
 class Player(object):
@@ -23,13 +24,9 @@ class Player(object):
     def remove_from_field(self):
         for i in range(len(self.player)):
             self.field.tiles[self.player[i][0], self.player[i][1]] = TILE_ID_GROUND
-    
-    def move(self, direction):
-        self.direction = direction
 
-        self.remove_from_field()
-
-        # TODO move player when button is holding
+    @check_move
+    def move(self):
         if self.direction == "left":
             is_move = True
             for coord in self.player:
@@ -46,5 +43,3 @@ class Player(object):
             if is_move:
                 for i in range(len(self.player)):
                     self.player[i][0] += 1
-
-        self.put_to_field()

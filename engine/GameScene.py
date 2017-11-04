@@ -18,19 +18,23 @@ class GameScene(Scene):
         self.tiles = np.zeros((self.tiles_x, self.tiles_y), dtype=int)
         self.player = Player(self)
 
-        self.step = 0
-        self.sleep_time = .3
-        t = threading.Thread(target=self.update_step)
-        t.start()
+        self.track_step = 0
+        self.track_sleep_time = .3
+        threading.Thread(target=self.update_track).start()
 
-    def update_step(self):
+        self.move_sleep_time = .1
+        threading.Thread(target=self.update_move).start()
+
+    def update_track(self):
         while not self.is_end():
-            self.step += 1
-            if self.step >= BORDER_HEIGHT+1:
-                self.step = 0
+            self.track_step = 0 if self.track_step >= BORDER_HEIGHT else self.track_step + 1
             self.make_level()
-            self.player.put_to_field()
-            time.sleep(self.sleep_time)
+            time.sleep(self.track_sleep_time)
+
+    def update_move(self):
+        while not self.is_end():
+            self.player.move()
+            time.sleep(self.move_sleep_time)
 
     def _event(self, event):
         for e in event.get():
@@ -38,23 +42,25 @@ class GameScene(Scene):
                 if e.key == pygame.K_ESCAPE:
                     self.the_end()
                 elif e.key == pygame.K_LEFT:
-                    self.player.move("left")
+                    self.player.direction = "left"
+                    self.player.move()
                 elif e.key == pygame.K_RIGHT:
-                    self.player.move("right")
+                    self.player.direction = "right"
+                    self.player.move()
+            elif e.type == pygame.KEYUP:
+                self.player.direction = None
 
     def make_level(self):
         for x in range(self.tiles_x):
             for y in range(self.tiles_y):
                 self.tiles[x, y] = TILE_ID_GROUND
+        self.player.put_to_field()
         self.draw_border_line(0)
         self.draw_border_line(TILE_X_COUNT-1)
 
     def draw_border_line(self, x):
         for y in range(self.tiles_y):
-            if (y % (BORDER_HEIGHT+1)) - self.step == 0:
-                self.tiles[x, y] = TILE_ID_GROUND
-            else:
-                self.tiles[x, y] = TILE_ID_WALL
+            self.tiles[x, y] = TILE_ID_GROUND if (y % (BORDER_HEIGHT+1)) - self.track_step == 0 else TILE_ID_WALL
 
     def _draw(self, dt):
         self.display.fill(BACKGROUND_COLOR)
