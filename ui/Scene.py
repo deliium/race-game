@@ -1,4 +1,4 @@
-from .const import *
+from engine.const import *
 
 """
 _foo() -> must override in descendants

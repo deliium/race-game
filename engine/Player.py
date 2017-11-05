@@ -1,45 +1,39 @@
-from .ResourceManager import ResourceManager
 from .const import *
 from .decorators import check_move
 
 
 class Player(object):
-    def __init__(self, field):
-        manager = ResourceManager()
-        self.tileset = manager.get_image("tileset.bmp")
-
-        self.field = field
-        self.player = PLAYER_COORDS
-
+    def __init__(self, track):
+        self.track = track
+        self.coords = PLAYER_COORDS
         self.direction = None
 
-    def put_to_field(self):
-        for i in range(len(self.player)):
-            if 0 < self.player[i][0] < self.field.tiles_x and 0 < self.player[i][1] < self.field.tiles_y:
-                self.field.tiles[self.player[i][0], self.player[i][1]] = TILE_ID_PLAYER
+    def attach(self):
+        for i in range(len(self.coords)):
+            if self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_GROUND:
+                self.track.tiles[self.coords[i][0]][self.coords[i][1]] = TILE_ID_PLAYER
             else:
-                # TODO collision reaction
-                pass
+                print("GAME OVER")
 
-    def remove_from_field(self):
-        for i in range(len(self.player)):
-            self.field.tiles[self.player[i][0], self.player[i][1]] = TILE_ID_GROUND
+    def detach(self):
+        for i in range(len(self.coords)):
+            self.track.tiles[self.coords[i][0]][self.coords[i][1]] = TILE_ID_GROUND
 
     @check_move
     def move(self):
         if self.direction == "left":
             is_move = True
-            for coord in self.player:
+            for coord in self.coords:
                 if coord[0] <= 1:
                     is_move = False
             if is_move:
-                for i in range(len(self.player)):
-                    self.player[i][0] -= 1
+                for i in range(len(self.coords)):
+                    self.coords[i][0] -= 1
         elif self.direction == "right":
             is_move = True
-            for coord in self.player:
+            for coord in self.coords:
                 if coord[0] >= TILE_X_COUNT-2:
                     is_move = False
             if is_move:
-                for i in range(len(self.player)):
-                    self.player[i][0] += 1
+                for i in range(len(self.coords)):
+                    self.coords[i][0] += 1

@@ -1,7 +1,7 @@
 def check_move(fn):
     def wrapped(self):
         if self.direction is not None:
-            self.remove_from_field()
+            self.detach()
             fn(self)
-            self.put_to_field()
+            self.attach()
     return wrapped

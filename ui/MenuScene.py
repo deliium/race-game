@@ -1,7 +1,7 @@
-from .Menu import Menu
+from engine.Menu import Menu
+from engine.const import *
 from .Scene import Scene
 from .GameScene import GameScene
-from .const import *
 
 
 class MenuScene(Scene):

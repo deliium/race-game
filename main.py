@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from engine.MenuScene import MenuScene
+from ui.MenuScene import MenuScene
 from engine.Game import Game
 from engine.const import *
 
