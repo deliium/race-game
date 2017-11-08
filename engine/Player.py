@@ -7,13 +7,18 @@ class Player(object):
         self.track = track
         self.coords = PLAYER_COORDS
         self.direction = None
+        self.score = 0
+        self.lives_count = PLAYER_LIVES_COUNT
+        self.is_dead = False
 
     def attach(self):
         for i in range(len(self.coords)):
             if self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_GROUND:
                 self.track.tiles[self.coords[i][0]][self.coords[i][1]] = TILE_ID_PLAYER
             else:
-                print("GAME OVER")
+                self.lives_count -= 1
+                if self.lives_count == 0:
+                    self.is_dead = True
 
     def detach(self):
         for i in range(len(self.coords)):

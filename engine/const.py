@@ -25,6 +25,8 @@ PLAYER_COORDS = [[5, 16], [4, 17], [5, 17], [6, 17], [5, 18], [4, 19], [6, 19]]
 ENEMY_COORS = [[2, 0], [1, 1], [2, 1], [3, 1], [2, 2], [1, 3], [3, 3]]
 CAR_WIDTH = 3
 
+PLAYER_LIVES_COUNT = 5
+
 GAME_TITLE = "Race game"
 GAME_ABOUT = """ About game >>= simple race game from tetris """
 GAME_HOTKEYS = """

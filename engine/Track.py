@@ -7,6 +7,7 @@ class Track(object):
         self.tiles = [[0 for _ in range(self.tiles_y)] for _ in range(self.tiles_x)]
 
         self.step = 0
+        self.speed = 1
         self.clear()
 
     def clear(self):

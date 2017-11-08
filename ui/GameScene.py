@@ -18,15 +18,22 @@ class GameScene(Scene):
         self.enemy.attach((0, 2))
         self.player = Player(self.track)
         self.player.attach()
+        self.font = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
 
         threading.Thread(target=self.update_track).start()
         threading.Thread(target=self.update_move).start()
 
     def update_track(self):
         while not self.is_end():
+            if self.player.is_dead:
+                # TODO need to stop game now
+                print("GAME OVER")
             self.player.detach()
             self.track.move()
             self.player.attach()
+            self.player.score += 1
+            if self.player.score % 50 == 0:
+                self.track.speed += 1
             time.sleep(TRACK_MOVE_SLEEP_TIME)
 
     def update_move(self):
@@ -39,7 +46,9 @@ class GameScene(Scene):
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_n:
                     self.enemy.attach((0, 2))
-                if e.key == pygame.K_ESCAPE:
+                elif e.key == pygame.K_p:
+                    self.the_end()
+                elif e.key == pygame.K_ESCAPE:
                     self.the_end()
                 elif e.key == pygame.K_LEFT:
                     self.player.direction = "left"
@@ -61,3 +70,10 @@ class GameScene(Scene):
                 src = Rect(self.track.tiles[x][y] * TILE_WIDTH, 0, TILE_WIDTH, TILE_HEIGHT)
 
                 self.display.blit(self.tileset, dest, src)
+
+        self.display.blit(self.font.render("Счёт: " + str(self.player.score), True, (0, 0, 0)),
+                          (self.track.tiles_x * TILE_WIDTH + TILE_WIDTH, TILE_HEIGHT))
+        self.display.blit(self.font.render("Скорость: " + str(self.track.speed), True, (0, 0, 0)),
+                          (self.track.tiles_x * TILE_WIDTH + TILE_WIDTH, TILE_HEIGHT*2))
+        self.display.blit(self.font.render("Жизней: " + str(self.player.lives_count), True, (0, 0, 0)),
+                          (self.track.tiles_x * TILE_WIDTH + TILE_WIDTH, TILE_HEIGHT * 3))
