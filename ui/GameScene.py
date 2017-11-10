@@ -47,7 +47,7 @@ class GameScene(Scene):
                 if e.key == pygame.K_n:
                     self.enemy.attach((0, 2))
                 elif e.key == pygame.K_p:
-                    self.the_end()
+                    self.set_next_scene(WaitScene())
                 elif e.key == pygame.K_ESCAPE:
                     self.the_end()
                 elif e.key == pygame.K_LEFT:
