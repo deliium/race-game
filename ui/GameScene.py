@@ -11,6 +11,10 @@ from .Scene import Scene
 
 class GameScene(Scene):
     def _start(self):
+        """
+        Init and start new game scene
+        :return: None
+        """
         self.tileset = self.manager.get_image("tileset.bmp")
 
         self.track = Track()
@@ -24,6 +28,10 @@ class GameScene(Scene):
         threading.Thread(target=self.update_move).start()
 
     def update_track(self):
+        """
+        Updating track for next game state
+        :return: None
+        """
         while not self.is_end():
             if self.player.is_dead:
                 # TODO need to stop game now
@@ -37,11 +45,20 @@ class GameScene(Scene):
             time.sleep(TRACK_MOVE_SLEEP_TIME)
 
     def update_move(self):
+        """
+        Update player move, handles player position on track
+        :return: None
+        """
         while not self.is_end():
             self.player.move()
             time.sleep(PLAYER_MOVE_SLEEP_TIME)
 
     def _event(self, event):
+        """
+        Make event handle
+        :param event: any occurred event
+        :return: None
+        """
         for e in event.get():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_n:
@@ -60,6 +77,11 @@ class GameScene(Scene):
                 self.player.direction = None
 
     def _draw(self, dt):
+        """
+        Redraw game by current status
+        :param dt: time interval pass from previous call
+        :return: None
+        """
         self.display.fill(BACKGROUND_COLOR)
 
         for x in range(self.track.tiles_x):

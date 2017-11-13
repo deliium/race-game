@@ -8,6 +8,13 @@ class ResourceManager:
                  image_dir='image',
                  sound_dir='sound',
                  music_dir='music'):
+        """
+        Makes resource access
+        :param data_dir: place, where all the data stored
+        :param image_dir: place, where all the images stored
+        :param sound_dir: place, where all the sounds stored
+        :param music_dir: place, where all the music stored
+        """
         # Каталог ресурсов
         self.data_dir = data_dir
         # Изображения
@@ -18,7 +25,11 @@ class ResourceManager:
         self.music_dir = music_dir
 
     def get_image(self, name):
-        """ load image by name """
+        """
+        Load image by name
+        :param name: Image name
+        :return: Image in pygame format
+        """
         fullname = os.path.join(self.data_dir,
                                 os.path.join(self.image_dir, name))
 

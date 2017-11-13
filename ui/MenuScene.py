@@ -6,21 +6,41 @@ from .GameScene import GameScene
 
 class MenuScene(Scene):
     def start_game(self):
+        """
+        Handle start game button in menu
+        :return: None
+        """
         self.scene.set_next_scene(self)
         self.set_next_scene(self.scene)
         self.the_end()
 
     def show_options(self):
+        """
+        Handle show option button in menu
+        :return: None
+        """
         print("show-options")
 
     def show_score(self):
+        """
+        Handle show score button in menu
+        :return: None
+        """
         print("show-score")
 
     def stop_game(self):
+        """
+        Handle stop game button in menu
+        :return: None
+        """
         self.set_next_scene(None)
         self.the_end()
 
     def _start(self):
+        """
+        Init and start new Menu scene
+        :return: None
+        """
         self.scene = GameScene()
         self.menu = Menu((330, 300))
         self.menuItems = (("Начать игру", self.start_game),
@@ -36,6 +56,11 @@ class MenuScene(Scene):
                                     item[1])
 
     def _event(self, event):
+        """
+        Make event handle
+        :param event: any occurred event
+        :return: None
+        """
         for e in event.get():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_DOWN:
@@ -46,5 +71,10 @@ class MenuScene(Scene):
                     self.menu.call()
 
     def _draw(self, dt):
+        """
+        Redraw menu by current status
+        :param dt: time interval pass from previous call
+        :return: None
+        """
         self.display.fill(BACKGROUND_COLOR)
         self.menu.draw(self.display)

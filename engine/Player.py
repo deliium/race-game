@@ -4,6 +4,10 @@ from .decorators import check_move
 
 class Player(object):
     def __init__(self, track):
+        """
+        Make player for game
+        :param track: place to put player
+        """
         self.track = track
         self.coords = PLAYER_COORDS
         self.direction = None
@@ -12,6 +16,10 @@ class Player(object):
         self.is_dead = False
 
     def attach(self):
+        """
+        Insert player on track
+        :return: None
+        """
         for i in range(len(self.coords)):
             if self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_GROUND:
                 self.track.tiles[self.coords[i][0]][self.coords[i][1]] = TILE_ID_PLAYER
@@ -21,11 +29,19 @@ class Player(object):
                     self.is_dead = True
 
     def detach(self):
+        """
+        Remove player from track
+        :return: None
+        """
         for i in range(len(self.coords)):
             self.track.tiles[self.coords[i][0]][self.coords[i][1]] = TILE_ID_GROUND
 
     @check_move
     def move(self):
+        """
+        Make player move
+        :return: None
+        """
         if self.direction == "left":
             is_move = True
             for coord in self.coords:
