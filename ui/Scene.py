@@ -1,5 +1,6 @@
 from engine.const import *
 
+
 class Scene(object):
     def __init__(self, next_scene=None):
         """
