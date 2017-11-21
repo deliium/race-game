@@ -86,20 +86,19 @@ class GameScene(Scene):
         windows_width, windows_height = pygame.display.get_surface().get_size()
 
         window_half_width = windows_width / 2
-        tile_real_height = windows_height / self.track.tiles_y
-        tile_real_width = window_half_width / self.track.tiles_x
+        tile_calculated_height = windows_height / self.track.tiles_y
+        tile_calculated_width = window_half_width / self.track.tiles_x
         margin = 1
 
-        tile_size = tile_real_width if tile_real_height > tile_real_width else tile_real_height
+        tile_size = tile_calculated_width if tile_calculated_height > tile_calculated_width else tile_calculated_height
+        scaled_tile = pygame.transform.scale(self.tileset, (int((tile_size - margin) * 2), int(tile_size - margin)))
 
         for x in range(self.track.tiles_x):
             for y in range(self.track.tiles_y):
                 # Draw tile in (x,y)
                 # get rect() area; select tile from tileset
                 destination = Rect(x * tile_size, y * tile_size, tile_size, tile_size)
-                scaled_tile = pygame.transform.scale(self.tileset, (int((tile_size - margin) * 2), int(tile_size - margin)))
                 src = Rect(self.track.tiles[x][y] * tile_size, 0, tile_size - margin, tile_size - margin)
-
                 self.display.blit(scaled_tile, destination, src)
 
         self.display.blit(self.font.render("Счёт: " + str(self.player.score), True, (0, 0, 0)),

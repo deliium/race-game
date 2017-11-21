@@ -1,9 +1,6 @@
 from pygame.locals import USEREVENT
 import pygame
 
-TILE_WIDTH = 24
-TILE_HEIGHT = 24
-
 TILE_X_COUNT = 11
 TILE_Y_COUNT = 20
 
@@ -35,4 +32,3 @@ ESC = exit
 Arrow left = move left
 Arrow right = move right
 """
-
