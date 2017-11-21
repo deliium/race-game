@@ -42,7 +42,9 @@ class GameScene(Scene):
             self.player.score += 1
             if self.player.score % 50 == 0:
                 self.track.speed += 1
-            time.sleep(TRACK_MOVE_SLEEP_TIME)
+            track_sleep_tipe = TRACK_MOVE_SLEEP_TIME / self.track.get_speed()
+            # time.sleep(TRACK_MOVE_SLEEP_TIME)
+            time.sleep(track_sleep_tipe)
 
     def update_move(self):
         """
@@ -73,6 +75,10 @@ class GameScene(Scene):
                 elif e.key == pygame.K_RIGHT:
                     self.player.direction = "right"
                     self.player.move()
+                elif e.key == pygame.K_UP:
+                    self.track.speed += 1
+                elif e.key == pygame.K_DOWN:
+                    self.track.speed -= 1
             elif e.type == pygame.KEYUP:
                 self.player.direction = None
 
