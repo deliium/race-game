@@ -1,11 +1,10 @@
 import pygame
 from engine import const
 from .Scene import Scene
-from .MenuScene import MenuScene
 from engine.SpriteAnimation import SpriteAnimation
 
 
-class ShowLogoScene(Scene):
+class LogoScene(Scene):
     def _start(self):
         """
         Init new logo scene
@@ -23,10 +22,11 @@ class ShowLogoScene(Scene):
         """
         for e in event.get():
             if e.type == pygame.KEYDOWN:
+                self.set_next_scene("menu")
                 self.the_end()
-                self.set_next_scene(MenuScene())
 
         if not self.logo.is_start():
+            self.set_next_scene("menu")
             self.the_end()
 
     def _update(self, dt):
@@ -58,15 +58,3 @@ class ShowLogoScene(Scene):
         self.display.blit(self.logo.get_sprite(self.sprite),
                           self.get_center(self.display.get_rect(),
                           self.sprite.get_rect()))
-
-
-class HideLogoScene(ShowLogoScene):
-    def _start(self):
-        """
-        Init new hide logo scene
-        :return:
-        """
-        ShowLogoScene._start(self)
-
-        self.logo.toggle()
-        self.logo.set_time(1000)
