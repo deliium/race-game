@@ -45,3 +45,6 @@ class Track(object):
         self.border_line(0)
         self.border_line(TILE_X_COUNT - 1)
 
+    def get_speed(self):
+        return 1 if self.speed < 1 else self.speed
+
