@@ -23,7 +23,9 @@ class GameScene(Scene):
         self.player = Player(self.track)
         self.player.attach()
         self.font = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
+        self.make_threads()
 
+    def make_threads(self):
         threading.Thread(target=self.update_track).start()
         threading.Thread(target=self.update_move).start()
 
@@ -34,8 +36,8 @@ class GameScene(Scene):
         """
         while not self.is_end():
             if self.player.is_dead:
-                # TODO need to stop game now
-                print("GAME OVER")
+                self.set_next_scene("game_over")
+                self.the_end()
             self.player.detach()
             self.track.move()
             self.player.attach()
@@ -66,8 +68,10 @@ class GameScene(Scene):
                 if e.key == pygame.K_n:
                     self.enemy.attach((0, 2))
                 elif e.key == pygame.K_p:
-                    self.set_next_scene(WaitScene())
+                    self.set_next_scene("pause")
+                    self.the_end()
                 elif e.key == pygame.K_ESCAPE:
+                    self.set_next_scene("menu")
                     self.the_end()
                 elif e.key == pygame.K_LEFT:
                     self.player.direction = "left"

@@ -31,8 +31,8 @@ class Scene(object):
         """
         self.display = display
         self.manager = manager
+        self.wake()
         self._start()
-        self.__end = False
 
     def _start(self):
         """
@@ -49,7 +49,7 @@ class Scene(object):
         :return: None
         """
         if len(event.get(pygame.QUIT)) > 0:
-            self.__end = True
+            self.the_end()
             self.set_next_scene(None)
             return
 
@@ -57,7 +57,7 @@ class Scene(object):
 
         for e in event.get(END_SCENE):
             if e.type == END_SCENE:
-                self.__end = True
+                self.the_end()
 
     def _draw(self, dt):
         """
@@ -100,12 +100,16 @@ class Scene(object):
         """
         return self.__end
 
+    def wake(self):
+        self.__end = False
+
     def the_end(self):
         """
         Do some stuff to make scene be ended
         :return: None
         """
-        pygame.event.post(pygame.event.Event(END_SCENE))
+        self.__end = True
+        #pygame.event.post(pygame.event.Event(END_SCENE))
 
     def set_next_scene(self, scene):
         """

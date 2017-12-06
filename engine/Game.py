@@ -1,3 +1,7 @@
+from ui.LogoScene import LogoScene
+from ui.MenuScene import MenuScene, PauseScene
+from ui.GameScene import GameScene
+from ui.GameOverScene import GameOverScene
 from .ResourceManager import ResourceManager
 from .const import *
 
@@ -6,7 +10,6 @@ class Game(object):
     def __init__(self,
                  width=800,
                  height=600,
-                 scene=None,
                  color=BACKGROUND_COLOR,
                  fps=40,
                  manager=ResourceManager()):
@@ -25,15 +28,30 @@ class Game(object):
         self.set_display(width, height)
 
         self.fps = fps
-        self.scene = scene
+        self.scenes = {"menu": MenuScene(),
+                       "game": GameScene(),
+                       "pause": PauseScene(),
+                       "game_over": GameOverScene(),
+                       "logo": LogoScene()}
+        self.scene_name = "logo"  # start scene
+        self.previous_scene_name = None
+        self.scene = self.scenes[self.scene_name]
         self.__manager = manager
 
         self.__display.fill(color)
         pygame.display.flip()
 
-    def set_display(self, width, height):
+    def flip_scene(self):
         """
-        Set initial size to game window
+        Switch to the next scene
+        :return: None
+        """
+        self.previous_scene_name = self.scene_name
+        self.scene_name = self.scene.next()
+        self.scene = self.scenes[self.scene_name] if self.scene_name is not None else None
+
+    def set_display(self, width, height):
+        """Set initial size to game window
         :param width: window width
         :param height: window height
         :return: None
@@ -62,7 +80,11 @@ class Game(object):
             dt = 0
 
             # init scene, set canvas and resource manager
-            self.scene.start(self.__display, self.__manager)
+            if self.previous_scene_name == "pause" and self.scene_name == "game":
+                self.scene.wake()
+                self.scene.make_threads()
+            else:
+                self.scene.start(self.__display, self.__manager)
 
             while not self.scene.is_end():
                 # say to scene how much time has passed
@@ -72,6 +94,6 @@ class Game(object):
 
                 dt = clock.tick(self.fps)
 
-            self.scene = self.scene.next()
+            self.flip_scene()
 
         pygame.quit()
