@@ -26,6 +26,10 @@ class GameScene(Scene):
         self.make_threads()
 
     def make_threads(self):
+        """
+        Start threads to change game state
+        :return: None
+        """
         threading.Thread(target=self.update_track).start()
         threading.Thread(target=self.update_move).start()
 

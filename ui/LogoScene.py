@@ -37,7 +37,8 @@ class LogoScene(Scene):
         """
         self.logo.update(dt)
 
-    def get_center(self, surface, sprite):
+    @staticmethod
+    def get_center(surface, sprite):
         """
         Return drawing start point for sprite to set him on surface center
         :param surface: drawing place

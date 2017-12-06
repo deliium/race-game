@@ -55,10 +55,6 @@ class Scene(object):
 
         self._event(event)
 
-        for e in event.get(END_SCENE):
-            if e.type == END_SCENE:
-                self.the_end()
-
     def _draw(self, dt):
         """
         <!> must override in descendants
@@ -101,6 +97,10 @@ class Scene(object):
         return self.__end
 
     def wake(self):
+        """
+        Make scene be alive again
+        :return: None
+        """
         self.__end = False
 
     def the_end(self):
@@ -109,7 +109,6 @@ class Scene(object):
         :return: None
         """
         self.__end = True
-        #pygame.event.post(pygame.event.Event(END_SCENE))
 
     def set_next_scene(self, scene):
         """
