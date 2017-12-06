@@ -1,7 +1,6 @@
 from engine.Menu import Menu
 from engine.const import *
 from .Scene import Scene
-from .GameScene import GameScene
 
 
 class MenuScene(Scene):
@@ -10,8 +9,7 @@ class MenuScene(Scene):
         Handle start game button in menu
         :return: None
         """
-        self.scene.set_next_scene(self)
-        self.set_next_scene(self.scene)
+        self.set_next_scene("game")
         self.the_end()
 
     def show_options(self):
@@ -41,7 +39,6 @@ class MenuScene(Scene):
         Init and start new Menu scene
         :return: None
         """
-        self.scene = GameScene()
         self.menu = Menu((330, 300))
         self.menuItems = (("Начать игру", self.start_game),
                           ("Настройки", self.show_options),
@@ -78,3 +75,31 @@ class MenuScene(Scene):
         """
         self.display.fill(BACKGROUND_COLOR)
         self.menu.draw(self.display)
+
+
+class PauseScene(MenuScene):
+    def continue_game(self):
+        """
+        Handle start game button in menu
+        :return: None
+        """
+        self.set_next_scene("game")
+        self.the_end()
+
+    def _start(self):
+        """
+        Init and start new Menu scene
+        :return: None
+        """
+        self.menu = Menu((330, 300))
+        self.menuItems = (("Продолжить игру", self.continue_game),
+                          ("Настройки", super().show_options),
+                          ("Счёт", super().show_score),
+                          ("Выйти", super().stop_game))
+
+        font = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
+        font_bold = pygame.font.SysFont("Monospace", 40, bold=True, italic=False)
+        for item in self.menuItems:
+            self.menu.add_menu_item(font.render(item[0], True, (0, 0, 0)),
+                                    font_bold.render(item[0], True, (0, 0, 0)),
+                                    item[1])
