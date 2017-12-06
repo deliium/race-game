@@ -17,7 +17,6 @@ class Game(object):
         Game main class. Game loop starts here
         :param width: window width
         :param height: window height
-        :param scene: main scene to start game
         :param color: use for background
         :param fps: use for snap game loop for time
         :param manager: use for load resources

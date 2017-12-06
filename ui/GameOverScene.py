@@ -24,7 +24,7 @@ class GameOverScene(Scene):
 
     def _draw(self, dt):
         """
-
+        Draw current scene state
         :param dt: time interval pass from previous call
         :return: None
         """
