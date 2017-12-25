@@ -1,6 +1,7 @@
 from pygame import Rect
 import threading
 import time
+import random
 
 from engine.Track import Track
 from engine.Enemy import Enemy
@@ -19,7 +20,6 @@ class GameScene(Scene):
 
         self.track = Track()
         self.enemy = Enemy(self.track)
-        self.enemy.attach((0, 2))
         self.player = Player(self.track)
         self.player.attach()
         self.font = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
@@ -39,6 +39,10 @@ class GameScene(Scene):
         :return: None
         """
         while not self.is_end():
+            if not self.enemy.wait:
+                self.enemy.attach(ENEMY_POSITIONS[random.randint(0, len(ENEMY_POSITIONS)-1)])
+            self.enemy.wait = ENEMY_WAIT_FOR_NEXT if not self.enemy.wait else self.enemy.wait - 1
+
             if self.player.is_dead:
                 self.set_next_scene("game_over")
                 self.the_end()
@@ -48,6 +52,7 @@ class GameScene(Scene):
             self.player.score += 1
             if self.player.score % 50 == 0:
                 self.track.speed += 1
+
             track_sleep_tipe = TRACK_MOVE_SLEEP_TIME / self.track.get_speed()
             # time.sleep(TRACK_MOVE_SLEEP_TIME)
             time.sleep(track_sleep_tipe)
@@ -69,9 +74,7 @@ class GameScene(Scene):
         """
         for e in event.get():
             if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_n:
-                    self.enemy.attach((0, 2))
-                elif e.key == pygame.K_p:
+                if e.key == pygame.K_p:
                     self.set_next_scene("pause")
                     self.the_end()
                 elif e.key == pygame.K_ESCAPE:

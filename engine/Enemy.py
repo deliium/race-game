@@ -8,6 +8,7 @@ class Enemy(object):
         :param track: place to put enemy
         """
         self.track = track
+        self.wait = ENEMY_WAIT_FOR_NEXT
 
     def attach(self, enemy_poses):
         """
