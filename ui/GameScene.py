@@ -6,6 +6,7 @@ import random
 from engine.Track import Track
 from engine.Enemy import Enemy
 from engine.Player import Player
+from engine.Animation import Animation
 from engine.const import *
 from .Scene import Scene
 
@@ -22,6 +23,13 @@ class GameScene(Scene):
         self.enemy = Enemy(self.track)
         self.player = Player(self.track)
         self.player.attach()
+        self.explosion_sprite_size = 192
+        self.explosion_speed = 4
+        self.explosion = Animation(self.manager.get_image("explosion.png"),
+                                   self.explosion_sprite_size,
+                                   self.explosion_sprite_size,
+                                   self.explosion_speed)
+        self.is_explosion_started = False
         self.font = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
         self.make_threads()
 
@@ -44,8 +52,10 @@ class GameScene(Scene):
             self.enemy.wait = ENEMY_WAIT_FOR_NEXT if not self.enemy.wait else self.enemy.wait - 1
 
             if self.player.is_dead:
-                self.set_next_scene("game_over")
-                self.the_end()
+                self.is_explosion_started = True
+                self.player.detach()
+                self.explosion.start()
+                break
             self.player.detach()
             self.track.move()
             self.player.attach()
@@ -63,6 +73,8 @@ class GameScene(Scene):
         :return: None
         """
         while not self.is_end():
+            if self.player.is_dead:
+                break
             self.player.move()
             time.sleep(PLAYER_MOVE_SLEEP_TIME)
 
@@ -93,6 +105,18 @@ class GameScene(Scene):
             elif e.type == pygame.KEYUP:
                 self.player.direction = None
 
+    def _update(self, dt):
+        """
+        Update scene by time
+        :param dt: time interval pass from previous call
+        :return: None
+        """
+        if self.is_explosion_started:
+            self.explosion.update(dt)
+            if not self.explosion.is_start() and self.player.is_dead:
+                self.set_next_scene("game_over")
+                self.the_end()
+
     def _draw(self, dt):
         """
         Redraw game by current status
@@ -106,6 +130,9 @@ class GameScene(Scene):
         self.display.fill(BACKGROUND_COLOR)
         self.draw_field(tile_size)
         self.draw_score(window_half_width, tile_size)
+        if self.explosion.is_start():
+            player_center = [x - int(self.explosion_sprite_size / 2) for x in self.player.get_center(tile_size)]
+            self.display.blit(self.explosion.sprite, player_center, self.explosion.get_coords())
 
     def calculate_tile_size(self, field_height, field_width):
         tile_calculated_height = field_height / self.track.tiles_y
