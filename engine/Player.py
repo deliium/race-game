@@ -36,6 +36,11 @@ class Player(object):
         for i in range(len(self.coords)):
             self.track.tiles[self.coords[i][0]][self.coords[i][1]] = TILE_ID_GROUND
 
+    def get_center(self, tile_size):
+        x = self.coords[PLAYER_CENTER][0] * (tile_size - 1) + int(tile_size/2)
+        y = self.coords[PLAYER_CENTER][1] * (tile_size - 1) + int(tile_size/2)
+        return x, y
+
     @check_move
     def move(self):
         """
