@@ -17,7 +17,8 @@ class MenuScene(Scene):
         Handle show option button in menu
         :return: None
         """
-        print("show-options")
+        self.set_next_scene("settings")
+        self.the_end()
 
     def show_score(self):
         """
