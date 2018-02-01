@@ -1,6 +1,7 @@
 from ui.LogoScene import LogoScene
 from ui.MenuScene import MenuScene, PauseScene
 from ui.SettingsScene import SettingsScene
+from ui.ScoreScene import ScoreScene
 from ui.GameScene import GameScene
 from ui.GameOverScene import GameOverScene
 from .ResourceManager import ResourceManager
@@ -30,6 +31,7 @@ class Game(object):
         self.fps = fps
         self.scenes = {"menu": MenuScene(),
                        "settings": SettingsScene(),
+                       "score": ScoreScene(),
                        "game": GameScene(),
                        "pause": PauseScene(),
                        "game_over": GameOverScene(),
