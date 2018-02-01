@@ -8,6 +8,7 @@ from engine.Enemy import Enemy
 from engine.Player import Player
 from engine.Animation import Animation
 from engine.const import *
+from .ScoreScene import ScoreScene
 from .Scene import Scene
 
 
@@ -52,6 +53,7 @@ class GameScene(Scene):
             self.enemy.wait = ENEMY_WAIT_FOR_NEXT if not self.enemy.wait else self.enemy.wait - 1
 
             if self.player.is_dead:
+                ScoreScene.save(self.player.score)
                 self.is_explosion_started = True
                 self.player.detach()
                 self.explosion.start()
@@ -90,6 +92,7 @@ class GameScene(Scene):
                     self.set_next_scene("pause")
                     self.the_end()
                 elif e.key == pygame.K_ESCAPE:
+                    ScoreScene.save(self.player.score)
                     self.set_next_scene("menu")
                     self.the_end()
                 elif e.key == pygame.K_LEFT:

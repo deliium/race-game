@@ -25,7 +25,8 @@ class MenuScene(Scene):
         Handle show score button in menu
         :return: None
         """
-        print("show-score")
+        self.set_next_scene("score")
+        self.the_end()
 
     def stop_game(self):
         """
