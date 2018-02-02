@@ -4,14 +4,15 @@ from ui.SettingsScene import SettingsScene
 from ui.ScoreScene import ScoreScene
 from ui.GameScene import GameScene
 from ui.GameOverScene import GameOverScene
+from .Settings import Settings
 from .ResourceManager import ResourceManager
 from .const import *
 
 
 class Game(object):
     def __init__(self,
-                 width=800,
-                 height=600,
+                 width=DEFAULT_WIDTH,
+                 height=DEFAULT_HEIGHT,
                  color=BACKGROUND_COLOR,
                  fps=40,
                  manager=ResourceManager()):
@@ -24,6 +25,8 @@ class Game(object):
         :param manager: use for load resources
         """
         pygame.init()
+
+        self.settings = Settings.load()
 
         self.__display = None
         self.set_display(width, height)
@@ -59,7 +62,12 @@ class Game(object):
         :param height: window height
         :return: None
         """
-        self.__display = pygame.display.set_mode((width, height))
+        if self.settings['full_screen']:
+            width = self.settings['full_screen_width']
+            height = self.settings['full_screen_height']
+            self.__display = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+        else:
+            self.__display = pygame.display.set_mode((width, height))
 
     def set_caption(self, title=None, icon=None):
         """

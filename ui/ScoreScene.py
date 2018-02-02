@@ -39,12 +39,12 @@ class ScoreScene(Scene):
 
     @staticmethod
     def save(score):
-        d = shelve.open('score.txt')
+        d = shelve.open(SCORE_FILE)
         d['score'] = score
         d.close()
 
     def _load(self):
-        d = shelve.open("score.txt")
+        d = shelve.open(SCORE_FILE)
         try:
             self.score = d['score']
         except KeyError:

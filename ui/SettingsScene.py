@@ -1,5 +1,5 @@
-import shelve
 from engine.const import *
+from engine.Settings import Settings
 from .Scene import Scene
 from .CheckBox import CheckBox
 from .Label import Label
@@ -11,10 +11,12 @@ class SettingsScene(Scene):
         Init and start new Scene
         :return: None
         """
+        self.settings = Settings.load()
+
         self.header_label = Label(self.display, 150, 30, "Настройки", 72)
         self.full_screen_label = Label(self.display, 50, 100, "Полный экран", 48)
         self.full_screen_checkbox = CheckBox(self.display, 500, 100, 32)
-        self._load()
+        self.full_screen_checkbox.checked = self.settings['full_screen']
 
     def _draw(self, dt):
         """
@@ -36,20 +38,14 @@ class SettingsScene(Scene):
         for e in event.get():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
-                    self._save()
+                    self.settings['full_screen'] = self.full_screen_checkbox.is_checked()
+                    if self.settings['full_screen']:
+                        width = self.settings['full_screen_width']
+                        height = self.settings['full_screen_height']
+                        pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+                    else:
+                        pygame.display.set_mode((DEFAULT_WIDTH, DEFAULT_HEIGHT))
+                    Settings.save(self.settings)
                     self.set_next_scene("menu")
                     self.the_end()
             self.full_screen_checkbox.update(e)
-
-    def _save(self):
-        d = shelve.open('settings.txt')
-        d['full_screen'] = self.full_screen_checkbox.is_checked()
-        d.close()
-
-    def _load(self):
-        d = shelve.open("settings.txt")
-        try:
-            self.full_screen_checkbox.checked = d['full_screen']
-        except KeyError:
-            d['full_screen'] = self.full_screen_checkbox.is_checked()
-        d.close()

@@ -65,9 +65,8 @@ class GameScene(Scene):
             if self.player.score % 50 == 0:
                 self.track.speed += 1
 
-            track_sleep_tipe = TRACK_MOVE_SLEEP_TIME / self.track.get_speed()
-            # time.sleep(TRACK_MOVE_SLEEP_TIME)
-            time.sleep(track_sleep_tipe)
+            track_sleep_time = TRACK_MOVE_SLEEP_TIME / self.track.get_speed()
+            time.sleep(track_sleep_time)
 
     def update_move(self):
         """

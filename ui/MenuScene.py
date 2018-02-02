@@ -41,7 +41,11 @@ class MenuScene(Scene):
         Init and start new Menu scene
         :return: None
         """
-        self.menu = Menu((330, 300))
+        info = pygame.display.Info()
+        menu_width = int(info.current_w/2.4)
+        menu_height = int(info.current_h/2)
+
+        self.menu = Menu((menu_width, menu_height))
         self.menuItems = (("Начать игру", self.start_game),
                           ("Настройки", self.show_options),
                           ("Счёт", self.show_score),

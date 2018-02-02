@@ -1,6 +1,12 @@
 from pygame.locals import USEREVENT
 import pygame
 
+DEFAULT_WIDTH = 800
+DEFAULT_HEIGHT = 600
+
+SETTINGS_FILE = 'settings.txt'
+SCORE_FILE = 'score.txt'
+
 TILE_X_COUNT = 11
 TILE_Y_COUNT = 20
 
