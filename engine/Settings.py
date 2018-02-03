@@ -1,31 +1,43 @@
 import shelve
+from engine.decorators import singleton
 from engine.const import *
 
 
+@singleton
 class Settings(object):
-    @staticmethod
-    def save(settings):
+    def __init__(self):
+        self.items = {}
+        self.load()
+
+    def save(self):
         d = shelve.open(SETTINGS_FILE)
-        for key in settings:
-            d[key] = settings[key]
+        for key in self.items:
+            d[key] = self.items[key]
         d.close()
 
-    @staticmethod
-    def load():
-        result = {}
+    def load(self):
         d = shelve.open(SETTINGS_FILE)
         try:
-            result['full_screen'] = d['full_screen']
+            self.items['full_screen'] = d['full_screen']
         except KeyError:
-            result['full_screen'] = False
+            self.items['full_screen'] = False
 
         try:
-            result['full_screen_width'] = d['full_screen_width']
-            result['full_screen_height'] = d['full_screen_height']
+            self.items['full_screen_width'] = d['full_screen_width']
+            self.items['full_screen_height'] = d['full_screen_height']
         except KeyError:
             info = pygame.display.Info()
-            result['full_screen_width'] = info.current_w
-            result['full_screen_height'] = info.current_h
+            self.items['full_screen_width'] = info.current_w
+            self.items['full_screen_height'] = info.current_h
 
         d.close()
-        return result
+
+    def __getitem__(self, key):
+        try:
+            value = self.items[key]
+        except KeyError:
+            value = None
+        return value
+
+    def __setitem__(self, key, value):
+        self.items[key] = value
