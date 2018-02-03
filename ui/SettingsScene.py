@@ -11,7 +11,8 @@ class SettingsScene(Scene):
         Init and start new Scene
         :return: None
         """
-        self.settings = Settings.load()
+        self.settings = Settings()
+        self.settings.load()
 
         self.header_label = Label(self.display, 150, 30, "Настройки", 72)
         self.full_screen_label = Label(self.display, 50, 100, "Полный экран", 48)
@@ -45,7 +46,7 @@ class SettingsScene(Scene):
                         pygame.display.set_mode((width, height), pygame.FULLSCREEN)
                     else:
                         pygame.display.set_mode((DEFAULT_WIDTH, DEFAULT_HEIGHT))
-                    Settings.save(self.settings)
+                    self.settings.save()
                     self.set_next_scene("menu")
                     self.the_end()
             self.full_screen_checkbox.update(e)

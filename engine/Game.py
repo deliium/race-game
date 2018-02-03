@@ -26,7 +26,8 @@ class Game(object):
         """
         pygame.init()
 
-        self.settings = Settings.load()
+        self.settings = Settings()
+        self.settings.load()
 
         self.__display = None
         self.set_display(width, height)
