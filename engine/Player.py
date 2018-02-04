@@ -1,3 +1,4 @@
+from copy import deepcopy
 from .const import *
 from .decorators import check_move
 
@@ -9,7 +10,7 @@ class Player(object):
         :param track: place to put player
         """
         self.track = track
-        self.coords = PLAYER_COORDS
+        self.coords = deepcopy(PLAYER_COORDS)
         self.direction = None
         self.score = 0
         self.lives_count = PLAYER_LIVES_COUNT

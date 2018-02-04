@@ -19,6 +19,8 @@ class GameScene(Scene):
         :return: None
         """
         self.tileset = self.manager.get_image("tileset.bmp")
+        self.main_theme_music = self.manager.get_music("main-theme.ogg")
+        self.explosion_sound = self.manager.get_sound("boom.ogg")
 
         self.track = Track()
         self.enemy = Enemy(self.track)
@@ -41,6 +43,7 @@ class GameScene(Scene):
         """
         threading.Thread(target=self.update_track).start()
         threading.Thread(target=self.update_move).start()
+        self.main_theme_music.play()
 
     def update_track(self):
         """
@@ -57,6 +60,7 @@ class GameScene(Scene):
                 self.is_explosion_started = True
                 self.player.detach()
                 self.explosion.start()
+                self.explosion_sound.play()
                 break
             self.player.detach()
             self.track.move()
@@ -135,6 +139,10 @@ class GameScene(Scene):
         if self.explosion.is_start():
             player_center = [x - int(self.explosion_sprite_size / 2) for x in self.player.get_center(tile_size)]
             self.display.blit(self.explosion.sprite, player_center, self.explosion.get_coords())
+
+    def the_end(self):
+        self.main_theme_music.stop()
+        super().the_end()
 
     def calculate_tile_size(self, field_height, field_width):
         tile_calculated_height = field_height / self.track.tiles_y

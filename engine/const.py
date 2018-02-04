@@ -3,6 +3,7 @@ import pygame
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 600
+DEFAULT_FPS = 60
 
 SETTINGS_FILE = 'settings.txt'
 SCORE_FILE = 'score.txt'
