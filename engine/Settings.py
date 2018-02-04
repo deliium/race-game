@@ -32,6 +32,23 @@ class Settings(object):
 
         d.close()
 
+    def get_display(self):
+        """ get pygame.display with mode settings
+        :return: pygame.display
+        """
+        if self.items['full_screen']:
+            width = self.items['full_screen_width']
+            height = self.items['full_screen_height']
+            return pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+        else:
+            return pygame.display.set_mode((DEFAULT_WIDTH, DEFAULT_HEIGHT))
+
+    def get_fps(self):
+        """ get game fps
+        :return: fps value
+        """
+        return DEFAULT_FPS
+
     def __getitem__(self, key):
         try:
             value = self.items[key]

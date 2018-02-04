@@ -10,29 +10,14 @@ from .const import *
 
 
 class Game(object):
-    def __init__(self,
-                 width=DEFAULT_WIDTH,
-                 height=DEFAULT_HEIGHT,
-                 color=BACKGROUND_COLOR,
-                 fps=40,
-                 manager=ResourceManager()):
+    def __init__(self):
         """
         Game main class. Game loop starts here
-        :param width: window width
-        :param height: window height
-        :param color: use for background
-        :param fps: use for snap game loop for time
-        :param manager: use for load resources
         """
         pygame.init()
 
         self.settings = Settings()
-        self.settings.load()
 
-        self.__display = None
-        self.set_display(width, height)
-
-        self.fps = fps
         self.scenes = {"menu": MenuScene(),
                        "settings": SettingsScene(),
                        "score": ScoreScene(),
@@ -43,9 +28,10 @@ class Game(object):
         self.scene_name = "logo"  # start scene
         self.previous_scene_name = None
         self.scene = self.scenes[self.scene_name]
-        self.__manager = manager
 
-        self.__display.fill(color)
+        self.__manager = ResourceManager()
+        self.__display = self.settings.get_display()
+        self.__display.fill(BACKGROUND_COLOR)
         pygame.display.flip()
 
     def flip_scene(self):
@@ -56,19 +42,6 @@ class Game(object):
         self.previous_scene_name = self.scene_name
         self.scene_name = self.scene.next()
         self.scene = self.scenes[self.scene_name] if self.scene_name is not None else None
-
-    def set_display(self, width, height):
-        """Set initial size to game window
-        :param width: window width
-        :param height: window height
-        :return: None
-        """
-        if self.settings['full_screen']:
-            width = self.settings['full_screen_width']
-            height = self.settings['full_screen_height']
-            self.__display = pygame.display.set_mode((width, height), pygame.FULLSCREEN)
-        else:
-            self.__display = pygame.display.set_mode((width, height))
 
     def set_caption(self, title=None, icon=None):
         """
@@ -104,7 +77,7 @@ class Game(object):
 
                 pygame.display.flip()
 
-                dt = clock.tick(self.fps)
+                dt = clock.tick(self.settings.get_fps())
 
             self.flip_scene()
 
