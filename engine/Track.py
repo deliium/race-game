@@ -11,6 +11,7 @@ class Track(object):
 
         self.step = 0
         self.speed = 1
+        self.level = 1
         self.clear()
 
     def clear(self):

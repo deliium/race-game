@@ -70,8 +70,12 @@ class GameScene(Scene):
             self.track.move()
             self.player.attach()
             self.player.score += 1
-            if self.player.score % 50 == 0:
+            if self.player.score % (SPEED_INCREASE_SCORE * self.track.level) == 0:
                 self.track.speed += 1
+            if self.player.score % (LEVEL_INCREASE_SCORE * self.track.level) == 0:
+                self.track.level += 1
+                self.player.lives_count = int(self.player.lives_count * 1.7)
+                self.track.speed = self.track.level
 
             track_sleep_time = TRACK_MOVE_SLEEP_TIME / self.track.get_speed()
             time.sleep(track_sleep_time)
@@ -173,3 +177,5 @@ class GameScene(Scene):
                           (window_half_width + tile_size, tile_size * 2))
         self.display.blit(self.font.render("Жизней: " + str(self.player.lives_count), True, (0, 0, 0)),
                           (window_half_width + tile_size, tile_size * 3))
+        self.display.blit(self.font.render("Уровень: " + str(self.track.level), True, (0, 0, 0)),
+                          (window_half_width + tile_size, tile_size * 4))
