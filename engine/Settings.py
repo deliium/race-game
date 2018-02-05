@@ -23,6 +23,11 @@ class Settings(object):
             self.items['full_screen'] = False
 
         try:
+            self.items['music'] = d['music']
+        except KeyError:
+            self.items['music'] = False
+
+        try:
             self.items['full_screen_width'] = d['full_screen_width']
             self.items['full_screen_height'] = d['full_screen_height']
         except KeyError:
