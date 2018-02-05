@@ -1,15 +1,18 @@
-from pygame import Rect
+import random
 import threading
 import time
-import random
 
-from engine.Track import Track
-from engine.Enemy import Enemy
-from engine.Player import Player
+from pygame import Rect
+
 from engine.Animation import Animation
 from engine.const import *
-from .ScoreScene import ScoreScene
+from engine.Enemy import Enemy
+from engine.Player import Player
+from engine.Settings import Settings
+from engine.Track import Track
+
 from .Scene import Scene
+from .ScoreScene import ScoreScene
 
 
 class GameScene(Scene):
@@ -33,6 +36,7 @@ class GameScene(Scene):
                                    self.explosion_sprite_size,
                                    self.explosion_speed)
         self.is_explosion_started = False
+        self.settings = Settings()
         self.font = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
         self.make_threads()
 
@@ -43,7 +47,8 @@ class GameScene(Scene):
         """
         threading.Thread(target=self.update_track).start()
         threading.Thread(target=self.update_move).start()
-        self.main_theme_music.play()
+        if self.settings['music']:
+            self.main_theme_music.play()
 
     def update_track(self):
         """
@@ -60,14 +65,19 @@ class GameScene(Scene):
                 self.is_explosion_started = True
                 self.player.detach()
                 self.explosion.start()
-                self.explosion_sound.play()
+                if self.settings['music']:
+                    self.explosion_sound.play()
                 break
             self.player.detach()
             self.track.move()
             self.player.attach()
             self.player.score += 1
-            if self.player.score % 50 == 0:
+            if self.player.score % (SPEED_INCREASE_SCORE * self.track.level) == 0:
                 self.track.speed += 1
+            if self.player.score % (LEVEL_INCREASE_SCORE * self.track.level) == 0:
+                self.track.level += 1
+                self.player.lives_count = int(self.player.lives_count * 1.7)
+                self.track.speed = self.track.level
 
             track_sleep_time = TRACK_MOVE_SLEEP_TIME / self.track.get_speed()
             time.sleep(track_sleep_time)
@@ -169,3 +179,5 @@ class GameScene(Scene):
                           (window_half_width + tile_size, tile_size * 2))
         self.display.blit(self.font.render("Жизней: " + str(self.player.lives_count), True, (0, 0, 0)),
                           (window_half_width + tile_size, tile_size * 3))
+        self.display.blit(self.font.render("Уровень: " + str(self.track.level), True, (0, 0, 0)),
+                          (window_half_width + tile_size, tile_size * 4))

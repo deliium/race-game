@@ -1,6 +1,7 @@
 import shelve
-from engine.decorators import singleton
+
 from engine.const import *
+from engine.decorators import singleton
 
 
 @singleton
@@ -21,6 +22,11 @@ class Settings(object):
             self.items['full_screen'] = d['full_screen']
         except KeyError:
             self.items['full_screen'] = False
+
+        try:
+            self.items['music'] = d['music']
+        except KeyError:
+            self.items['music'] = False
 
         try:
             self.items['full_screen_width'] = d['full_screen_width']

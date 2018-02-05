@@ -1,12 +1,14 @@
-import pygame
+import inspect
 import os
 import sys
-import inspect
+
+import pygame
+
+from engine.ResourceManager import ResourceManager
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-from engine.ResourceManager import ResourceManager
 
 
 manager = ResourceManager()

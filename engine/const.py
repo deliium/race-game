@@ -1,5 +1,5 @@
-from pygame.locals import USEREVENT
 import pygame
+from pygame.locals import USEREVENT
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 600
@@ -33,6 +33,8 @@ ENEMY_POSITIONS = [(0,), (1,), (2,), (1, 2), (0, 1), (0, 2)]
 CAR_WIDTH = 3
 
 PLAYER_LIVES_COUNT = 5
+SPEED_INCREASE_SCORE = 25
+LEVEL_INCREASE_SCORE = 100
 
 GAME_TITLE = "Race game"
 GAME_ABOUT = """ About game >>= simple race game from tetris """

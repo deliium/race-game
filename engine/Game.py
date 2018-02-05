@@ -1,12 +1,13 @@
+from ui.GameOverScene import GameOverScene
+from ui.GameScene import GameScene
 from ui.LogoScene import LogoScene
 from ui.MenuScene import MenuScene, PauseScene
-from ui.SettingsScene import SettingsScene
 from ui.ScoreScene import ScoreScene
-from ui.GameScene import GameScene
-from ui.GameOverScene import GameOverScene
-from .Settings import Settings
-from .ResourceManager import ResourceManager
+from ui.SettingsScene import SettingsScene
+
 from .const import *
+from .ResourceManager import ResourceManager
+from .Settings import Settings
 
 
 class Game(object):
