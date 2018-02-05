@@ -1,8 +1,9 @@
 from engine.const import *
 from engine.Settings import Settings
-from .Scene import Scene
+
 from .CheckBox import CheckBox
 from .Label import Label
+from .Scene import Scene
 
 
 class SettingsScene(Scene):

@@ -1,5 +1,6 @@
-from .Scene import Scene
 from engine.const import *
+
+from .Scene import Scene
 
 
 class GameOverScene(Scene):
@@ -29,4 +30,3 @@ class GameOverScene(Scene):
         :return: None
         """
         self.display.blit(self.font.render("Игра закончена", True, (0, 0, 0)), (400, 300))
-

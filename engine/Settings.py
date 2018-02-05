@@ -1,6 +1,7 @@
 import shelve
-from engine.decorators import singleton
+
 from engine.const import *
+from engine.decorators import singleton
 
 
 @singleton

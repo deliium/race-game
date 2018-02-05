@@ -1,7 +1,9 @@
 import pygame
+
 from engine import const
-from .Scene import Scene
 from engine.SpriteAnimation import SpriteAnimation
+
+from .Scene import Scene
 
 
 class LogoScene(Scene):

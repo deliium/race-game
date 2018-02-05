@@ -1,16 +1,18 @@
-from pygame import Rect
+import random
 import threading
 import time
-import random
 
-from engine.Track import Track
+from pygame import Rect
+
+from engine.Animation import Animation
+from engine.const import *
 from engine.Enemy import Enemy
 from engine.Player import Player
-from engine.Animation import Animation
 from engine.Settings import Settings
-from engine.const import *
-from .ScoreScene import ScoreScene
+from engine.Track import Track
+
 from .Scene import Scene
+from .ScoreScene import ScoreScene
 
 
 class GameScene(Scene):

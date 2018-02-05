@@ -1,4 +1,5 @@
 from copy import deepcopy
+
 from .const import *
 from .decorators import check_move
 

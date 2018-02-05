@@ -48,4 +48,3 @@ class Track(object):
 
     def get_speed(self):
         return 1 if self.speed < 1 else self.speed
-

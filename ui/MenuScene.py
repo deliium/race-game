@@ -1,5 +1,6 @@
-from engine.Menu import Menu
 from engine.const import *
+from engine.Menu import Menu
+
 from .Scene import Scene
 
 

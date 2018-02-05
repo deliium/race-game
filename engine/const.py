@@ -1,5 +1,5 @@
-from pygame.locals import USEREVENT
 import pygame
+from pygame.locals import USEREVENT
 
 DEFAULT_WIDTH = 800
 DEFAULT_HEIGHT = 600

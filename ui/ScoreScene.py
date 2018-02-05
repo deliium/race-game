@@ -1,7 +1,9 @@
 import shelve
+
 from engine.const import *
-from .Scene import Scene
+
 from .Label import Label
+from .Scene import Scene
 
 
 class ScoreScene(Scene):
