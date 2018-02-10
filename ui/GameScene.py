@@ -1,4 +1,3 @@
-import random
 import threading
 import time
 
@@ -6,7 +5,7 @@ from pygame import Rect
 
 from engine.Animation import Animation
 from engine.const import *
-from engine.Enemy import Enemy
+from engine.Obstacle import Obstacle
 from engine.Player import Player
 from engine.Settings import Settings
 from engine.Track import Track
@@ -21,12 +20,13 @@ class GameScene(Scene):
         Init and start new game scene
         :return: None
         """
-        self.tileset = self.manager.get_image("tileset.bmp")
+        self.tileset = self.manager.get_image("tileset.png")
         self.main_theme_music = self.manager.get_music("main-theme.ogg")
         self.explosion_sound = self.manager.get_sound("boom.ogg")
 
+        self.width, self.height = pygame.display.get_surface().get_size()
         self.track = Track()
-        self.enemy = Enemy(self.track)
+        self.obstacle = Obstacle(self.track)
         self.player = Player(self.track)
         self.player.attach()
         self.explosion_sprite_size = 192
@@ -38,6 +38,7 @@ class GameScene(Scene):
         self.is_explosion_started = False
         self.settings = Settings()
         self.font = pygame.font.SysFont("Monospace", 40, bold=False, italic=False)
+        self.calculate_tile_size()
         self.make_threads()
 
     def make_threads(self):
@@ -56,9 +57,9 @@ class GameScene(Scene):
         :return: None
         """
         while not self.is_end():
-            if not self.enemy.wait:
-                self.enemy.attach(ENEMY_POSITIONS[random.randint(0, len(ENEMY_POSITIONS)-1)])
-            self.enemy.wait = ENEMY_WAIT_FOR_NEXT if not self.enemy.wait else self.enemy.wait - 1
+            if not self.obstacle.wait:
+                self.obstacle.attach()
+            self.obstacle.wait = OBSTACLE_WAIT_FOR_NEXT if not self.obstacle.wait else self.obstacle.wait - 1
 
             if self.player.is_dead:
                 ScoreScene.save(self.player.score)
@@ -139,45 +140,39 @@ class GameScene(Scene):
         :param dt: time interval pass from previous call
         :return: None
         """
-        windows_width, windows_height = pygame.display.get_surface().get_size()
-        window_half_width = windows_width / 2
-        tile_size = self.calculate_tile_size(windows_height, window_half_width)
-
         self.display.fill(BACKGROUND_COLOR)
-        self.draw_field(tile_size)
-        self.draw_score(window_half_width, tile_size)
+        self.draw_field()
+        self.draw_score()
         if self.explosion.is_start():
-            player_center = [x - int(self.explosion_sprite_size / 2) for x in self.player.get_center(tile_size)]
+            player_center = [x - int(self.explosion_sprite_size / 2) for x in self.player.get_center(self.tile_size)]
             self.display.blit(self.explosion.sprite, player_center, self.explosion.get_coords())
 
     def the_end(self):
         self.main_theme_music.stop()
         super().the_end()
 
-    def calculate_tile_size(self, field_height, field_width):
-        tile_calculated_height = field_height / self.track.tiles_y
-        tile_calculated_width = field_width / self.track.tiles_x
-        tile_size = tile_calculated_width if tile_calculated_height > tile_calculated_width else tile_calculated_height
-        return tile_size
+    def calculate_tile_size(self):
+        field_width = self.width / 2
+        field_height = self.height
+        tile_height = field_height / self.track.tiles_y
+        tile_width = field_width / self.track.tiles_x
+        self.tile_size = int(tile_width if tile_height > tile_width else tile_height)
+        self.scaled_tile = pygame.transform.scale(self.tileset, (self.tile_size * TILES_COUNT, self.tile_size))
 
-    def draw_field(self, tile_size):
+    def draw_field(self):
         margin = 1
-        scaled_tile = pygame.transform.scale(self.tileset, (int((tile_size - margin) * 2), int(tile_size - margin)))
-
         for x in range(self.track.tiles_x):
             for y in range(self.track.tiles_y):
                 # Draw tile in (x,y)
                 # get rect() area; select tile from tileset
-                destination = Rect(x * tile_size, y * tile_size, tile_size, tile_size)
-                src = Rect(self.track.tiles[x][y] * tile_size, 0, tile_size - margin, tile_size - margin)
-                self.display.blit(scaled_tile, destination, src)
+                destination = Rect(x * self.tile_size, y * self.tile_size, self.tile_size, self.tile_size)
+                src = Rect(self.track.tiles[x][y] * self.tile_size, 0, self.tile_size - margin, self.tile_size - margin)
+                self.display.blit(self.scaled_tile, destination, src)
 
-    def draw_score(self, window_half_width, tile_size):
-        self.display.blit(self.font.render("Счёт: " + str(self.player.score), True, (0, 0, 0)),
-                          (window_half_width + tile_size, tile_size))
-        self.display.blit(self.font.render("Скорость: " + str(self.track.speed), True, (0, 0, 0)),
-                          (window_half_width + tile_size, tile_size * 2))
-        self.display.blit(self.font.render("Жизней: " + str(self.player.lives_count), True, (0, 0, 0)),
-                          (window_half_width + tile_size, tile_size * 3))
-        self.display.blit(self.font.render("Уровень: " + str(self.track.level), True, (0, 0, 0)),
-                          (window_half_width + tile_size, tile_size * 4))
+    def draw_score(self):
+        x = self.width / 2 + self.tile_size
+        y = self.tile_size
+        self.display.blit(self.font.render("Счёт: " + str(self.player.score), True, (0, 0, 0)), (x, y))
+        self.display.blit(self.font.render("Скорость: " + str(self.track.speed), True, (0, 0, 0)), (x, y*2))
+        self.display.blit(self.font.render("Жизней: " + str(self.player.lives_count), True, (0, 0, 0)), (x, y*3))
+        self.display.blit(self.font.render("Уровень: " + str(self.track.level), True, (0, 0, 0)), (x, y*4))
