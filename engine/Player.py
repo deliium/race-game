@@ -15,6 +15,8 @@ class Player(object):
         self.direction = None
         self.score = 0
         self.lives_count = PLAYER_LIVES_COUNT
+        self.invulnerability_time = INVULNERABILITY_TIME
+        self.is_invulnerability = False
         self.is_dead = False
 
     def attach(self):
@@ -25,10 +27,22 @@ class Player(object):
         for i in range(len(self.coords)):
             if self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_GROUND:
                 self.track.tiles[self.coords[i][0]][self.coords[i][1]] = TILE_ID_PLAYER
-            else:
-                self.lives_count -= 1
-                if self.lives_count == 0:
-                    self.is_dead = True
+            elif self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_BONUS_LIFE:
+                self.lives_count += 1
+            elif self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_BONUS_SPEED:
+                self.track.speed += 1
+            elif self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_BONUS_INVULNERABILITY:
+                self.is_invulnerability = True
+            elif self.track.tiles[self.coords[i][0]][self.coords[i][1]] == TILE_ID_ENEMY:
+                if self.is_invulnerability:
+                    if self.invulnerability_time == 0:
+                        self.invulnerability_time = INVULNERABILITY_TIME
+                        return
+                    self.invulnerability_time -= 1
+                else:
+                    self.lives_count -= 1
+                    if self.lives_count == 0:
+                        self.is_dead = True
 
     def detach(self):
         """
