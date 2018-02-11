@@ -1,8 +1,9 @@
-import shelve
 from engine.const import *
-from .Scene import Scene
+from engine.Settings import Settings
+
 from .CheckBox import CheckBox
 from .Label import Label
+from .Scene import Scene
 
 
 class SettingsScene(Scene):
@@ -11,10 +12,18 @@ class SettingsScene(Scene):
         Init and start new Scene
         :return: None
         """
+        self.settings = Settings()
+        self.settings.load()
+
         self.header_label = Label(self.display, 150, 30, "Настройки", 72)
+
         self.full_screen_label = Label(self.display, 50, 100, "Полный экран", 48)
         self.full_screen_checkbox = CheckBox(self.display, 500, 100, 32)
-        self._load()
+        self.full_screen_checkbox.checked = self.settings['full_screen']
+
+        self.music_label = Label(self.display, 50, 150, "Музыка", 48)
+        self.music_checkbox = CheckBox(self.display, 500, 150, 32)
+        self.music_checkbox.checked = self.settings['music']
 
     def _draw(self, dt):
         """
@@ -26,6 +35,8 @@ class SettingsScene(Scene):
         self.header_label.render()
         self.full_screen_label.render()
         self.full_screen_checkbox.render()
+        self.music_label.render()
+        self.music_checkbox.render()
 
     def _event(self, event):
         """
@@ -36,20 +47,17 @@ class SettingsScene(Scene):
         for e in event.get():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
-                    self._save()
+                    self.settings['full_screen'] = self.full_screen_checkbox.is_checked()
+                    if self.settings['full_screen']:
+                        width = self.settings['full_screen_width']
+                        height = self.settings['full_screen_height']
+                        pygame.display.set_mode((width, height), pygame.FULLSCREEN)
+                    else:
+                        pygame.display.set_mode((DEFAULT_WIDTH, DEFAULT_HEIGHT))
+
+                    self.settings['music'] = self.music_checkbox.is_checked()
+                    self.settings.save()
                     self.set_next_scene("menu")
                     self.the_end()
             self.full_screen_checkbox.update(e)
-
-    def _save(self):
-        d = shelve.open('settings.txt')
-        d['full_screen'] = self.full_screen_checkbox.is_checked()
-        d.close()
-
-    def _load(self):
-        d = shelve.open("settings.txt")
-        try:
-            self.full_screen_checkbox.checked = d['full_screen']
-        except KeyError:
-            d['full_screen'] = self.full_screen_checkbox.is_checked()
-        d.close()
+            self.music_checkbox.update(e)

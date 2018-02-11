@@ -4,7 +4,7 @@ from engine.Game import Game
 from engine.const import *
 
 if __name__ == '__main__':
-    game = Game(800, 600)
+    game = Game()
     game.set_caption(GAME_TITLE, "icon.png")
 
     print(GAME_TITLE)

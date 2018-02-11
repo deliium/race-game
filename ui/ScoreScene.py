@@ -1,7 +1,9 @@
 import shelve
+
 from engine.const import *
-from .Scene import Scene
+
 from .Label import Label
+from .Scene import Scene
 
 
 class ScoreScene(Scene):
@@ -39,12 +41,12 @@ class ScoreScene(Scene):
 
     @staticmethod
     def save(score):
-        d = shelve.open('score.txt')
+        d = shelve.open(SCORE_FILE)
         d['score'] = score
         d.close()
 
     def _load(self):
-        d = shelve.open("score.txt")
+        d = shelve.open(SCORE_FILE)
         try:
             self.score = d['score']
         except KeyError:

@@ -15,3 +15,14 @@ def check_move(fn):
             fn(self)
             self.attach()
     return wrapped
+
+
+# from PEP 0318
+def singleton(cls):
+    instances = {}
+
+    def get_instance():
+        if cls not in instances:
+            instances[cls] = cls()
+        return instances[cls]
+    return get_instance
