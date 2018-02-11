@@ -17,14 +17,14 @@ class Obstacle(object):
         :return:
         """
         for pos in OBSTACLE_POSITIONS[random.randint(0, len(OBSTACLE_POSITIONS) - 1)]:
-            obstacle_type = random.randint(0, 100)
-            if 30 < obstacle_type < 40:
+            obstacle_type = random.randint(OBSTACLE_RANDOM_LIMITS[0], OBSTACLE_RANDOM_LIMITS[1])
+            if BONUS_LIFE_LIMITS[0] < obstacle_type < BONUS_LIFE_LIMITS[1]:
                 obstacle_coords = BONUS_LIFE_COORDS
                 obstacle_tile = TILE_ID_BONUS_LIFE
-            elif 50 < obstacle_type < 60:
+            elif BONUS_SPEED_LIMITS[0] < obstacle_type < BONUS_SPEED_LIMITS[1]:
                 obstacle_coords = BONUS_SPEED_COORDS
                 obstacle_tile = TILE_ID_BONUS_SPEED
-            elif 70 < obstacle_type < 80:
+            elif BONUS_INVULNERABILITY_LIMITS[0] < obstacle_type < BONUS_INVULNERABILITY_LIMITS[1]:
                 obstacle_coords = BONUS_INVULNERABILITY_COORDS
                 obstacle_tile = TILE_ID_BONUS_INVULNERABILITY
             else:

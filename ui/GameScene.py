@@ -77,7 +77,7 @@ class GameScene(Scene):
                 self.track.speed += 1
             if self.player.score % (LEVEL_INCREASE_SCORE * self.track.level) == 0:
                 self.track.level += 1
-                self.player.lives_count = int(self.player.lives_count * 1.7)
+                self.player.lives_count = int(self.player.lives_count * PLAYER_LIVES_INCREASE)
                 self.track.speed = self.track.level
 
             track_sleep_time = TRACK_MOVE_SLEEP_TIME / self.track.get_speed()
